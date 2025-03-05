@@ -3,6 +3,7 @@
  */
 const { OpenAI } = require('openai');
 const config = require('../config/config');
+const Wish = require('../models/Wish');
 
 // Khởi tạo client OpenAI
 const openai = new OpenAI({
@@ -57,8 +58,20 @@ exports.generateFortune = async (req, res) => {
       max_tokens: config.openai.maxTokens
     });
     
-    // Trả về kết quả
+    // Lấy kết quả từ OpenAI
     const fortuneResult = response.choices[0].message.content.trim();
+    
+    // Lưu lời chúc vào database
+    try {
+      await Wish.create({
+        name: playerName,
+        message: fortuneResult
+      });
+      console.log(`Đã lưu lời chúc của ${playerName} vào database`);
+    } catch (dbError) {
+      console.error('Lỗi khi lưu vào database:', dbError);
+      // Không return lỗi ở đây vì vẫn muốn trả về kết quả cho user
+    }
     
     // Log thông tin cho debug
     console.log(`Đã tạo lời chúc cho ${playerName} với chủ đề ${fortuneType}`);

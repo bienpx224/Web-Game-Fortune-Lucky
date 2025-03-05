@@ -3,11 +3,21 @@
  */
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const config = require('./config/config');
 const apiRoutes = require('./routes/api');
+const wishRoutes = require('./routes/wishRoutes');
 
 // Khởi tạo ứng dụng Express
 const app = express();
+
+// Kết nối MongoDB
+mongoose.connect(config.mongodb.uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('Đã kết nối thành công với MongoDB'))
+.catch(err => console.error('Lỗi kết nối MongoDB:', err));
 
 // Middleware
 app.use(cors()); // Cho phép CORS để frontend có thể gọi API
@@ -21,6 +31,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api', apiRoutes);
+app.use('/api', wishRoutes);
 
 // Route mặc định
 app.get('/', (req, res) => {

@@ -3,23 +3,6 @@
  * Code by AI Assistant
  */
 
-// URL của backend API - xử lý tất cả các tình huống
-const API_URL = (() => {
-    // Kiểm tra nếu đang mở file trực tiếp (file://)
-    if (window.location.protocol === 'file:') {
-        // Khi mở file trực tiếp, luôn sử dụng localhost:5001
-        return 'http://localhost:5001/api';
-    }
-    
-    // Kiểm tra môi trường: nếu chạy trên localhost, sử dụng URL đầy đủ với port 5001
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        return 'http://localhost:5001/api';
-    }
-    
-    // Trên môi trường production (Vercel), sử dụng URL tương đối
-    return '/api';
-})();
-
 document.addEventListener('DOMContentLoaded', () => {
     // Elements
     const nameScreen = document.getElementById('nameScreen');
@@ -306,5 +289,52 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Thông báo
         alert('Đã sao chép kết quả! Bạn có thể dán vào ứng dụng để chia sẻ.');
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        
+        const nameInput = document.getElementById('name');
+        const name = nameInput.value.trim();
+        
+        if (!name) {
+            alert('Vui lòng nhập tên của bạn!');
+            return;
+        }
+
+        try {
+            // Gọi API để lấy lời chúc
+            const response = await fetch('/api/fortune', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                // Lưu lời chúc vào backend
+                await fetch('/api/wishes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        message: data.fortune
+                    })
+                });
+
+                // Hiển thị kết quả
+                showResult(data.fortune);
+            } else {
+                alert('Có lỗi xảy ra: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Lỗi:', error);
+            alert('Có lỗi xảy ra khi gửi yêu cầu!');
+        }
     }
 }); 

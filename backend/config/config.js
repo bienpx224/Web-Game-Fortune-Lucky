@@ -7,9 +7,12 @@ module.exports = {
   port: process.env.PORT || 5001,
   openai: {
     apiKey: process.env.OPENAI_API_KEY,
-    model: process.env.OPENAI_MODEL || 'gpt-3.5-turbo',
+    model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
     maxTokens: parseInt(process.env.OPENAI_MAX_TOKENS || 200),
     temperature: parseFloat(process.env.OPENAI_TEMPERATURE || 0.7)
+  },
+  mongodb: {
+    uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/lucky-game'
   },
   
   // Prompt template giống với frontend để đảm bảo tính nhất quán
