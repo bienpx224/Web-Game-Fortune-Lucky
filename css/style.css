@@ -1,0 +1,307 @@
+/* Thiết lập chung */
+:root {
+    --primary-color: #ff6b81;
+    --secondary-color: #ff4757;
+    --background-color: #f9f1fe;
+    --text-color: #333;
+    --card-bg: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --success-color: #2ecc71;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    background-image: url('../img/bg-pattern.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Card styling */
+.card {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+h1 {
+    font-size: 2.2rem;
+}
+
+p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* Input styling */
+.input-group {
+    margin-top: 20px;
+}
+
+input {
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    width: 100%;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    transition: border 0.3s ease;
+}
+
+input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+/* Fortune box styling */
+.fortune-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fortune-box {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, #ff6b81, #ff4757);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    color: white;
+    font-size: 3rem;
+    box-shadow: 0 10px 20px rgba(255, 75, 87, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fortune-box:hover {
+    transform: scale(1.05);
+}
+
+.fortune-box.shaking {
+    animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+.action-btn {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    box-shadow: 0 5px 15px rgba(255, 107, 129, 0.4);
+}
+
+/* Loading screen */
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Result screen styling */
+.result-card {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.result-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed var(--primary-color);
+}
+
+.result-subtitle {
+    font-style: italic;
+    color: #777;
+}
+
+.result-content {
+    background-color: #fff9fc;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 20px 0;
+    text-align: left;
+    box-shadow: inset 0 0 10px rgba(255, 107, 129, 0.1);
+}
+
+.result-message {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+.share-btn {
+    background-color: #3498db;
+    margin-top: 10px;
+}
+
+.share-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Utility classes */
+.hidden {
+    display: none;
+}
+
+footer {
+    margin-top: auto;
+    padding: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .card {
+        padding: 25px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .fortune-box {
+        width: 120px;
+        height: 120px;
+        font-size: 2.5rem;
+    }
+    
+    .result-message {
+        font-size: 1.1rem;
+    }
+}
+
+/* CSS cho thông báo lỗi */
+.error-notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    max-width: 600px;
+    width: 90%;
+    animation: slideDown 0.5s ease-out;
+}
+
+.error-box {
+    background-color: #fff;
+    border-left: 5px solid #ff4d4f;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    padding: 15px 20px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.error-box h3 {
+    color: #ff4d4f;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.error-box p {
+    margin: 8px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.error-box ul {
+    margin: 10px 0;
+    padding-left: 25px;
+}
+
+.error-box li {
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 14px;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+} 

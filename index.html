@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Gieo Quẻ May Mắn - Ngày 8/3</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Màn hình nhập tên -->
+        <div class="screen" id="nameScreen">
+            <div class="card">
+                <h1>Game Gieo Quẻ May Mắn</h1>
+                <p>Nhân ngày 8/3, hãy nhận lấy lời chúc may mắn dành riêng cho bạn</p>
+                <div class="input-group">
+                    <input type="text" id="playerName" placeholder="Nhập tên của bạn">
+                    <button id="startGame">Bắt đầu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Màn hình gieo quẻ -->
+        <div class="screen hidden" id="gameScreen">
+            <div class="card">
+                <h2>Xin chào, <span id="playerNameDisplay"></span>!</h2>
+                <p>Hãy rút một quẻ may mắn ngày 8/3</p>
+                
+                <div class="fortune-container">
+                    <div class="fortune-box" id="fortuneBox">
+                        <i class="fa-solid fa-gift fa-bounce"></i>
+                    </div>
+                    <button id="drawFortune" class="action-btn">Rút quẻ may mắn</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Màn hình loading -->
+        <div class="screen hidden" id="loadingScreen">
+            <div class="card">
+                <h2>Đang tạo lời chúc cho bạn...</h2>
+                <div class="loader"></div>
+            </div>
+        </div>
+
+        <!-- Màn hình kết quả -->
+        <div class="screen hidden" id="resultScreen">
+            <div class="card result-card">
+                <div class="result-header">
+                    <h2>Quẻ của bạn: <span id="fortuneType"></span></h2>
+                    <p class="result-subtitle">Dành cho <span id="resultNameDisplay"></span></p>
+                </div>
+                <div class="result-content">
+                    <div class="result-message" id="fortuneResult"></div>
+                </div>
+                <button id="drawAgain" class="action-btn">Rút quẻ khác</button>
+                <button id="shareResult" class="share-btn"><i class="fa-solid fa-share-nodes"></i> Chia sẻ</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Game Gieo Quẻ May Mắn AI Style - Ngày 8/3 - Sotatek</p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
