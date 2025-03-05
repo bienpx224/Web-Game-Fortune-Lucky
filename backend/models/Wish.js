@@ -11,6 +11,10 @@ const wishSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  luckyNumber: {
+    type: Number,
+    required: false
+  },
   createdAt: {
     type: Date,
     default: Date.now

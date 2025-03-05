@@ -47,7 +47,7 @@ exports.generateFortune = async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "Bạn là trợ lý AI tạo lời chúc và câu thơ cho ngày Quốc tế Phụ nữ 8/3."
+          content: "Bạn là trợ lý AI tạo lời chúc và câu thơ cho ngày Quốc tế Phụ nữ 8/3. Hãy luôn kết thúc lời chúc bằng một dòng mới và thêm một số may mắn từ 1-99 ở dòng cuối cùng với định dạng 'Số may mắn của bạn: X'."
         },
         {
           role: "user",
@@ -61,13 +61,32 @@ exports.generateFortune = async (req, res) => {
     // Lấy kết quả từ OpenAI
     const fortuneResult = response.choices[0].message.content.trim();
     
+    // Trích xuất số may mắn từ kết quả
+    let luckyNumber = null;
+    let cleanedFortuneResult = fortuneResult;
+    
+    // Tìm số may mắn bằng regex (tìm "Số may mắn của bạn: X" hoặc các biến thể)
+    const luckyNumberMatch = fortuneResult.match(/Số may mắn của bạn:?\s*(\d+)/i);
+    if (luckyNumberMatch && luckyNumberMatch[1]) {
+      luckyNumber = parseInt(luckyNumberMatch[1]);
+      
+      // Lấy nội dung lời chúc mà không có dòng số may mắn
+      const lines = fortuneResult.split('\n');
+      const luckyNumberLineIndex = lines.findIndex(line => line.match(/Số may mắn của bạn/i));
+      
+      if (luckyNumberLineIndex !== -1) {
+        cleanedFortuneResult = lines.slice(0, luckyNumberLineIndex).join('\n').trim();
+      }
+    }
+    
     // Lưu lời chúc vào database
     try {
       await Wish.create({
         name: playerName,
-        message: fortuneResult
+        message: cleanedFortuneResult,
+        luckyNumber: luckyNumber
       });
-      console.log(`Đã lưu lời chúc của ${playerName} vào database`);
+      console.log(`Đã lưu lời chúc của ${playerName} với số may mắn ${luckyNumber} vào database`);
     } catch (dbError) {
       console.error('Lỗi khi lưu vào database:', dbError);
       // Không return lỗi ở đây vì vẫn muốn trả về kết quả cho user
@@ -82,7 +101,8 @@ exports.generateFortune = async (req, res) => {
       data: {
         result: fortuneResult,
         fortuneType,
-        playerName
+        playerName,
+        luckyNumber
       }
     });
     
