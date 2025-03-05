@@ -35,7 +35,7 @@ Thông điệp có thể là:
 Đảm bảo nội dung:
 - Phù hợp văn hóa Việt Nam và văn hóa công sở
 - Mang tính cá nhân hóa cao (nhắc đến tên và đặc điểm của người nhận)
-- Vui tươi, tích cực, có thể dí dỏm một chút nhưng vẫn chuyên nghiệp
+- Vui tươi, tích cực, dí dỏm một chút nhưng vẫn chuyên nghiệp, có phong cách ngôn từ tuổi trẻ, genz
 - Ngắn gọn, không quá 6-8 dòng
 - Thể hiện sự trân trọng đối với phụ nữ trong ngành công nghệ
 
