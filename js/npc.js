@@ -61,7 +61,34 @@ class NPCCharacter {
             <p>Số may mắn thầy lấy đánh đề nhé 🤣</p>
         `;
 
+        // Tạo nút đóng welcome message
+        const closeButton = document.createElement('button');
+        closeButton.className = 'close-welcome-btn';
+        closeButton.innerHTML = '✖';
+        closeButton.setAttribute('aria-label', 'Đóng');
+        closeButton.addEventListener('click', () => this.closeWelcomeMessage(message));
+        
+        // Thêm nút đóng vào message
+        message.appendChild(closeButton);
+
         this.container.insertBefore(message, this.container.firstChild);
+        this.welcomeMessage = message;
+    }
+    
+    /**
+     * Đóng welcome message khi click vào nút đóng
+     * @param {HTMLElement} messageElement - Phần tử welcome message cần đóng
+     */
+    closeWelcomeMessage(messageElement) {
+        // Thêm animation fade out
+        messageElement.style.animation = 'fadeOut 0.5s ease-out forwards';
+        
+        // Xóa phần tử sau khi animation kết thúc
+        setTimeout(() => {
+            if (messageElement && messageElement.parentNode) {
+                messageElement.remove();
+            }
+        }, 500);
     }
     
     /**
