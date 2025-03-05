@@ -7,6 +7,13 @@
     --card-bg: #ffffff;
     --shadow-color: rgba(0, 0, 0, 0.1);
     --success-color: #2ecc71;
+    
+    /* Bổ sung màu sắc cho lời chúc */
+    --message-color-1: #e84393;
+    --message-color-2: #9b59b6;
+    --message-color-3: #3498db;
+    --message-color-4: #fd79a8;
+    --message-color-5: #6c5ce7;
 }
 
 * {
@@ -192,19 +199,93 @@ button:hover {
 }
 
 .result-content {
-    background-color: #fff9fc;
+    background-image: linear-gradient(to bottom right, #fff9fc, #f8f9ff);
     border-radius: 15px;
     padding: 25px;
     margin: 20px 0;
     text-align: left;
-    box-shadow: inset 0 0 10px rgba(255, 107, 129, 0.1);
+    box-shadow: inset 0 0 15px rgba(255, 107, 129, 0.15);
+    line-height: 1.8;
+    border: 1px solid rgba(255, 107, 129, 0.2);
 }
 
 .result-message {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.3rem;
-    line-height: 1.7;
-    color: #333;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+    font-weight: 500;
+    text-align: left;
+    color: var(--message-color-1);
+}
+
+/* Áp dụng màu sắc khác nhau cho các dòng văn bản */
+.result-message p:nth-child(5n+1) {
+    color: var(--message-color-1);
+}
+
+.result-message p:nth-child(5n+2) {
+    color: var(--message-color-2);
+}
+
+.result-message p:nth-child(5n+3) {
+    color: var(--message-color-3);
+}
+
+.result-message p:nth-child(5n+4) {
+    color: var(--message-color-4);
+}
+
+.result-message p:nth-child(5n+5) {
+    color: var(--message-color-5);
+}
+
+.result-message p {
+    margin-bottom: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.result-message p:hover {
+    transform: translateY(-2px);
+}
+
+.result-message strong {
+    font-weight: 600;
+}
+
+/* Đồng bộ hoàn toàn style cho highlight */
+.result-message .highlight {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 500;
+    text-align: left;
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+}
+
+/* Desktop adjustment */
+@media (min-width: 769px) {
+    .result-message {
+        font-size: 1.3rem;
+    }
+    
+    .result-message p {
+        font-size: 1.3rem;
+    }
+    
+    .result-message .highlight {
+        font-size: 1.3rem;
+    }
+    
+    .result-message p:hover {
+        transform: translateY(-3px);
+    }
 }
 
 .share-btn {
@@ -247,6 +328,10 @@ footer {
     
     .result-message {
         font-size: 1.1rem;
+    }
+    
+    .logo {
+        max-width: 100px;
     }
 }
 
@@ -304,4 +389,25 @@ footer {
         opacity: 1;
         transform: translate(-50%, 0);
     }
+}
+
+/* Logo styling */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    max-width: 120px;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(255, 107, 129, 0.3);
+    border: 3px solid #fff;
+    margin: 0 auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
 } 

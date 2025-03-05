@@ -277,12 +277,16 @@ class FloatingWishes {
         font-weight: bold;
         text-align: center;
         color: white;
-        font-size: 12px;
-        padding: 5px;
+        font-size: 10px;
+        padding: 3px;
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        letter-spacing: -0.2px;
+        transform: scale(0.9);
+        transform-origin: center center;
+        line-height: 1.1;
       }
 
       .wish-message {
@@ -362,22 +366,27 @@ class FloatingWishes {
     setInterval(async () => {
       const newWishes = await this.fetchRecentWishes();
       
-      // Tìm những lời chúc mới
-      const newOnes = newWishes.filter(newWish => 
-        !this.wishes.some(oldWish => 
-          oldWish._id === newWish._id
-        )
-      );
-
-      // Thêm những lời chúc mới
-      newOnes.forEach(wish => {
-        this.wishes.push(wish);
-        this.addWish(wish);
-      });
+      // Hiển thị ngẫu nhiên các lời chúc nhận được từ API, không phân biệt trùng lặp
+      if (newWishes.length > 0) {
+        // Lấy ngẫu nhiên từ 1 đến 3 lời chúc để hiển thị
+        const numToShow = Math.floor(Math.random() * 3) + 1;
+        
+        for (let i = 0; i < numToShow; i++) {
+          // Chọn một lời chúc ngẫu nhiên từ danh sách
+          const randomIndex = Math.floor(Math.random() * newWishes.length);
+          const randomWish = newWishes[randomIndex];
+          
+          // Hiển thị lời chúc ngẫu nhiên
+          this.addWish(randomWish);
+        }
+      }
+      
+      // Cập nhật danh sách lời chúc trong bộ nhớ, chỉ để lưu trữ
+      this.wishes = [...newWishes];
       
       // Giới hạn số lượng lời chúc lưu trong bộ nhớ
-      if (this.wishes.length > 20) {
-        this.wishes = this.wishes.slice(-20);
+      if (this.wishes.length > 30) {
+        this.wishes = this.wishes.slice(-30);
       }
     }, 10000);
   }

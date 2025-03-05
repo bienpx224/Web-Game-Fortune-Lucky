@@ -169,7 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
         fortuneTypeDisplay.textContent = `${fortune.icon} ${fortune.name}`;
         fortuneTypeDisplay.style.color = fortune.color;
         resultNameDisplay.textContent = name;
-        fortuneResultDisplay.textContent = result;
+        
+        // Xử lý định dạng kết quả để hiển thị đẹp hơn
+        const formattedResult = formatFortuneMessage(result, name);
+        fortuneResultDisplay.innerHTML = formattedResult;
         
         // Chuyển sang màn hình kết quả
         loadingScreen.classList.add('hidden');
@@ -177,6 +180,29 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Lưu kết quả vào localStorage
         saveResult(fortune, name, result);
+    }
+    
+    /**
+     * Định dạng nội dung lời chúc để hiển thị đẹp hơn với màu sắc
+     */
+    function formatFortuneMessage(message, name) {
+        if (!message) return '';
+        
+        // Tách các dòng của tin nhắn
+        let lines = message.split('\n');
+        
+        // Định dạng mỗi dòng - áp dụng màu sắc tự động qua CSS
+        let formattedLines = lines.map(line => {
+            // Bôi đậm tên người nhận
+            line = line.replace(
+                new RegExp(name, 'gi'), 
+                `<strong>${name}</strong>`
+            );
+            
+            return `<p>${line}</p>`;
+        });
+        
+        return formattedLines.join('');
     }
     
     /**
