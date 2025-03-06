@@ -56,7 +56,7 @@ class FloatingWish {
 
     const showMessage = () => {
       if (!this.isHovered) {
-        console.log('Show message triggered');
+        // console.log('Show message triggered');
         this.isHovered = true;
         this.pauseAnimation();
         messageEl.classList.remove('hidden');
@@ -69,7 +69,7 @@ class FloatingWish {
       // event có thể là null trong trường hợp gọi qua event handler khác
       const isStillHovering = event && wishBubbleEl.contains(event.relatedTarget);
       if (this.isHovered && !isStillHovering) {
-        console.log('Hide message triggered');
+        // console.log('Hide message triggered');
         this.isHovered = false;
         this.resumeAnimation();
         messageEl.classList.add('hidden');
@@ -342,7 +342,7 @@ class FloatingWishes {
       const response = await fetch(`${API_URL}/wishes/recent`);
       const data = await response.json();
       if (data.success) {
-        console.log('Nhận được lời chúc:', data.data); // Thêm log để debug
+        // console.log('Nhận được lời chúc:', data.data); // Thêm log để debug
         return data.data;
       }
       return [];
@@ -353,7 +353,7 @@ class FloatingWishes {
   }
 
   addWish(wish) {
-    console.log('Thêm lời chúc mới:', wish); // Thêm log để debug
+    // console.log('Thêm lời chúc mới:', wish); // Thêm log để debug
     new FloatingWish(wish, this.container);
   }
 
