@@ -10,6 +10,17 @@ class FloatingWish {
     this.init();
   }
 
+  // Thêm hàm sanitize để ngăn chặn XSS
+  sanitizeHTML(text) {
+    if (!text) return '';
+    // Tạo một phần tử div tạm thời
+    const tempElement = document.createElement('div');
+    // Đặt nội dung vào textContent (không phải innerHTML) để chuyển đổi tất cả HTML thành text
+    tempElement.textContent = text;
+    // Lấy ra text đã được sanitize
+    return tempElement.textContent;
+  }
+
   init() {
     // Tạo vị trí ngẫu nhiên trên trục X (chỉ ở 2 bên)
     const side = Math.random() > 0.5 ? 'left' : 'right';
@@ -27,6 +38,10 @@ class FloatingWish {
     this.currentPosition.y = -100;
     this.updatePosition();
     
+    // Sanitize dữ liệu người dùng trước khi hiển thị
+    const sanitizedName = this.sanitizeHTML(this.wish.name);
+    const sanitizedMessage = this.sanitizeHTML(this.wish.message);
+    
     this.element.innerHTML = `
       <div class="wish-bubble">
         <div class="flower">
@@ -39,12 +54,12 @@ class FloatingWish {
           <div class="petal petal-7"></div>
           <div class="petal petal-8"></div>
           <div class="flower-center">
-            <div class="wish-name">${this.wish.name}</div>
+            <div class="wish-name">${sanitizedName}</div>
           </div>
         </div>
         <div class="wish-message hidden">
-          <div class="recipient-name">Gửi đến: ${this.wish.name || 'Bạn'}</div>
-          <div class="message-content">${this.wish.message}</div>
+          <div class="recipient-name">Gửi đến: ${sanitizedName || 'Bạn'}</div>
+          <div class="message-content">${sanitizedMessage}</div>
         </div>
       </div>
     `;
