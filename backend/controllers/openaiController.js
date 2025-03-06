@@ -11,6 +11,59 @@ const openai = new OpenAI({
 });
 
 /**
+ * Hàm giúp escape các ký tự đặc biệt trong RegExp
+ * @param {string} string - Chuỗi cần escape
+ * @returns {string} - Chuỗi đã được escape
+ */
+const escapeRegExp = (string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+};
+
+/**
+ * Danh sách các từ khóa nguy hiểm cần kiểm tra
+ */
+const DANGEROUS_KEYWORDS = [
+  'javascript:',
+  'document',
+  'window',
+  'innerHTML',
+  'outerHTML',
+  'insertAdjacentHTML',
+  'eval',
+  'setTimeout',
+  'setInterval',
+  'Function',
+  'alert',
+  'confirm',
+  'prompt',
+  'onload',
+  'onunload',
+  'onclick',
+  'ondblclick',
+  'onmousedown',
+  'onmouseup',
+  'onmouseover',
+  'onmousemove',
+  'onmouseout',
+  'onkeydown',
+  'onkeypress',
+  'onkeyup',
+  'onfocus',
+  'onblur',
+  'onsubmit',
+  'onreset',
+  'onselect',
+  'onchange',
+  '<script',
+  '</script',
+  '<iframe',
+  '</iframe',
+  'onerror',
+  'fetch',
+  'XMLHttpRequest'
+];
+
+/**
  * Sanitize dữ liệu người dùng - loại bỏ các từ khóa nguy hiểm
  * @param {string} input - Chuỗi input cần kiểm tra
  * @returns {string} - Chuỗi đã được làm sạch
@@ -18,69 +71,14 @@ const openai = new OpenAI({
 const sanitizeUserInput = (input) => {
   if (!input) return '';
   
-  // Danh sách các từ khóa nguy hiểm cần kiểm tra
-  const dangerousKeywords = [
-    'javascript:',
-    'document',
-    'window',
-    'innerHTML',
-    'outerHTML',
-    'insertAdjacentHTML',
-    'eval',
-    'setTimeout',
-    'setInterval',
-    'Function(',
-    'alert(',
-    'confirm(',
-    'prompt(',
-    'onload',
-    'onunload',
-    'onclick',
-    'ondblclick',
-    'onmousedown',
-    'onmouseup',
-    'onmouseover',
-    'onmousemove',
-    'onmouseout',
-    'onkeydown',
-    'onkeypress',
-    'onkeyup',
-    'onfocus',
-    'onblur',
-    'onsubmit',
-    'onreset',
-    'onselect',
-    'onchange',
-    '<script',
-    '</script',
-    '<iframe',
-    '</iframe',
-    'onerror',
-    'fetch(',
-    'XMLHttpRequest',
-    'alert(',
-    'confirm(',
-    'prompt(',
-    'onload',
-    'onunload',
-    'onclick',
-    'ondblclick',
-    'onmousedown',
-    'onmouseup',
-    'onmouseover',
-    'onmousemove',
-    'onmouseout',
-    'onkeydown',
-    
-  ];
-  
   // Loại bỏ các thẻ HTML
   let sanitized = input;
   
   // Loại bỏ các từ khóa nguy hiểm
-  dangerousKeywords.forEach(keyword => {
+  DANGEROUS_KEYWORDS.forEach(keyword => {
     // Tìm và xóa từ khóa (không phân biệt hoa thường)
-    const regex = new RegExp(keyword, 'gi');
+    const escapedKeyword = escapeRegExp(keyword);
+    const regex = new RegExp(escapedKeyword, 'gi');
     sanitized = sanitized.replace(regex, '');
   });
   
@@ -88,6 +86,33 @@ const sanitizeUserInput = (input) => {
   sanitized = sanitized.replace(/<[^>]*>/g, '');
   
   return sanitized;
+};
+
+/**
+ * Kiểm tra xem input có chứa từ khóa nguy hiểm không
+ * @param {string} input - Chuỗi input cần kiểm tra
+ * @returns {boolean} - true nếu input chứa từ khóa nguy hiểm
+ */
+const containsMaliciousCode = (input) => {
+  if (!input) return false;
+  
+  // Kiểm tra nếu input chứa từ khóa nguy hiểm
+  for (const keyword of DANGEROUS_KEYWORDS) {
+    // Escape các ký tự đặc biệt trong keyword trước khi tạo RegExp
+    const escapedKeyword = escapeRegExp(keyword);
+    const regex = new RegExp(escapedKeyword, 'gi');
+    if (regex.test(input)) {
+      return true;
+    }
+  }
+  
+  // Kiểm tra các thẻ HTML
+  const htmlTagRegex = /<[^>]*>/g;
+  if (htmlTagRegex.test(input)) {
+    return true;
+  }
+  
+  return false;
 };
 
 /**
@@ -105,6 +130,31 @@ exports.generateFortune = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Thiếu thông tin! Cần cung cấp fortuneType và playerName'
+      });
+    }
+    
+    // Kiểm tra xem tên người dùng có chứa mã độc không
+    if (containsMaliciousCode(playerName)) {
+      console.log(`Phát hiện tên chứa mã độc: ${playerName}`);
+      
+      // Sanitize tên người dùng để hiển thị trong log
+      const sanitizedName = sanitizeUserInput(playerName);
+      
+      // Thông báo cảnh báo
+      const warningMessage = "Việt Nam làm gì có ai tên như bạn đâu, trí trá quá nên thầy không gieo quẻ cho đâu, lần sau đừng thế nhé!";
+      
+      // Log phát hiện hành vi đáng ngờ nhưng không lưu vào DB
+      console.log(`Phát hiện người dùng với tên không hợp lệ: ${sanitizedName} - KHÔNG lưu vào database`);
+      
+      // Trả về thông báo cảnh báo
+      return res.status(200).json({
+        success: true,
+        data: {
+          result: warningMessage,
+          fortuneType,
+          playerName: sanitizedName,
+          luckyNumber: 0
+        }
       });
     }
     
