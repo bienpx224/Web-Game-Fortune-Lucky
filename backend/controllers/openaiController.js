@@ -11,6 +11,86 @@ const openai = new OpenAI({
 });
 
 /**
+ * Sanitize dữ liệu người dùng - loại bỏ các từ khóa nguy hiểm
+ * @param {string} input - Chuỗi input cần kiểm tra
+ * @returns {string} - Chuỗi đã được làm sạch
+ */
+const sanitizeUserInput = (input) => {
+  if (!input) return '';
+  
+  // Danh sách các từ khóa nguy hiểm cần kiểm tra
+  const dangerousKeywords = [
+    'javascript:',
+    'document',
+    'window',
+    'innerHTML',
+    'outerHTML',
+    'insertAdjacentHTML',
+    'eval',
+    'setTimeout',
+    'setInterval',
+    'Function(',
+    'alert(',
+    'confirm(',
+    'prompt(',
+    'onload',
+    'onunload',
+    'onclick',
+    'ondblclick',
+    'onmousedown',
+    'onmouseup',
+    'onmouseover',
+    'onmousemove',
+    'onmouseout',
+    'onkeydown',
+    'onkeypress',
+    'onkeyup',
+    'onfocus',
+    'onblur',
+    'onsubmit',
+    'onreset',
+    'onselect',
+    'onchange',
+    '<script',
+    '</script',
+    '<iframe',
+    '</iframe',
+    'onerror',
+    'fetch(',
+    'XMLHttpRequest',
+    'alert(',
+    'confirm(',
+    'prompt(',
+    'onload',
+    'onunload',
+    'onclick',
+    'ondblclick',
+    'onmousedown',
+    'onmouseup',
+    'onmouseover',
+    'onmousemove',
+    'onmouseout',
+    'onkeydown',
+    
+  ];
+  
+  // Loại bỏ các thẻ HTML
+  let sanitized = input;
+  
+  // Loại bỏ các từ khóa nguy hiểm
+  dangerousKeywords.forEach(keyword => {
+    // Tìm và xóa từ khóa (không phân biệt hoa thường)
+    const regex = new RegExp(keyword, 'gi');
+    sanitized = sanitized.replace(regex, '');
+  });
+  
+  // Xóa các thẻ HTML
+  sanitized = sanitized.replace(/<[^>]*>/g, '');
+  
+  return sanitized;
+};
+
+/**
  * Tạo lời chúc dựa trên chủ đề và tên người chơi
  * @param {Object} req - Request object
  * @param {Object} res - Response object
@@ -18,7 +98,7 @@ const openai = new OpenAI({
 exports.generateFortune = async (req, res) => {
   try {
     // Lấy thông tin từ request body
-    const { fortuneType, playerName } = req.body;
+    let { fortuneType, playerName } = req.body;
     
     // Validate dữ liệu đầu vào
     if (!fortuneType || !playerName) {
@@ -27,6 +107,9 @@ exports.generateFortune = async (req, res) => {
         message: 'Thiếu thông tin! Cần cung cấp fortuneType và playerName'
       });
     }
+    
+    // Sanitize tên người chơi để ngăn chặn XSS
+    playerName = sanitizeUserInput(playerName);
     
     // Chuẩn bị prompt bằng cách thay thế các biến trong template
     const prompt = config.promptTemplate
