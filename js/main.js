@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             // Hiển thị kết quả
-            showResult(fortune, name, data.data.result);
+            showResult(fortune, name, data.data.result, data.data.luckyNumber);
         } catch (error) {
             console.error('Lỗi khi lấy kết quả:', error);
             
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Hiển thị kết quả
      */
-    function showResult(fortune, name, result) {
+    function showResult(fortune, name, result, luckyNumber) {
         // Cập nhật màn hình kết quả
         fortuneTypeDisplay.textContent = `${fortune.icon} ${fortune.name}`;
         fortuneTypeDisplay.style.color = fortune.color;
@@ -172,14 +172,23 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Xử lý định dạng kết quả để hiển thị đẹp hơn
         const formattedResult = formatFortuneMessage(result, name);
-        fortuneResultDisplay.innerHTML = formattedResult;
+        
+        // Thêm số may mắn vào cuối kết quả (nếu có)
+        let finalResult = formattedResult;
+        if (luckyNumber !== undefined && luckyNumber !== null) {
+            // Format số may mắn luôn hiển thị 2 chữ số (00-99)
+            const formattedNumber = luckyNumber.toString().padStart(2, '0');
+            finalResult += `<p class="lucky-number">Số may mắn của bạn: ${formattedNumber}</p>`;
+        }
+        
+        fortuneResultDisplay.innerHTML = finalResult;
         
         // Chuyển sang màn hình kết quả
         loadingScreen.classList.add('hidden');
         resultScreen.classList.remove('hidden');
         
         // Lưu kết quả vào localStorage
-        saveResult(fortune, name, result);
+        saveResult(fortune, name, result, luckyNumber);
     }
     
     /**
@@ -224,19 +233,23 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const result = mockResults[fortune.id] || `Chúc ${name} một ngày 8/3 tràn ngập niềm vui và hạnh phúc!`;
         
-        // Hiển thị kết quả mẫu
-        showResult(fortune, name, result);
+        // Tạo số may mắn ngẫu nhiên từ 0-99
+        const randomLuckyNumber = Math.floor(Math.random() * 100);
+        
+        // Hiển thị kết quả mẫu với số may mắn ngẫu nhiên
+        showResult(fortune, name, result, randomLuckyNumber);
     }
     
     /**
      * Lưu kết quả vào localStorage
      */
-    function saveResult(fortune, name, result) {
+    function saveResult(fortune, name, result, luckyNumber) {
         const historyData = {
             timestamp: new Date().toISOString(),
             name: name,
             fortune: fortune,
-            result: result
+            result: result,
+            luckyNumber: luckyNumber
         };
         
         // Lấy lịch sử cũ (nếu có)
@@ -354,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 // Hiển thị kết quả
-                showResult(data.fortune);
+                showResult(data.fortune, name, data.fortune.result, data.data.luckyNumber);
             } else {
                 alert('Có lỗi xảy ra: ' + data.message);
             }

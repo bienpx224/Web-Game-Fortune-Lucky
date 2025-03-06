@@ -180,7 +180,7 @@ exports.generateFortune = async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "Bạn là trợ lý AI tạo lời chúc và câu thơ cho ngày Quốc tế Phụ nữ 8/3. Hãy luôn kết thúc lời chúc bằng một dòng mới và thêm một số may mắn từ 1-99 ở dòng cuối cùng với định dạng 'Số may mắn của bạn: X'."
+          content: "Bạn là trợ lý AI tạo lời chúc và câu thơ cho ngày Quốc tế Phụ nữ 8/3. Hãy tạo ra nội dung sáng tạo theo yêu cầu. KHÔNG thêm số may mắn ở cuối lời chúc vì số may mắn sẽ được thêm vào tự động."
         },
         {
           role: "user",
@@ -194,22 +194,17 @@ exports.generateFortune = async (req, res) => {
     // Lấy kết quả từ OpenAI
     const fortuneResult = response.choices[0].message.content.trim();
     
-    // Trích xuất số may mắn từ kết quả
-    let luckyNumber = null;
+    // Thay vì dựa vào AI tạo số ngẫu nhiên, tự tạo số ngẫu nhiên từ 0-99
+    const randomLuckyNumber = Math.floor(Math.random() * 100);
+    const luckyNumber = randomLuckyNumber;
     let cleanedFortuneResult = fortuneResult;
     
-    // Tìm số may mắn bằng regex (tìm "Số may mắn của bạn: X" hoặc các biến thể)
-    const luckyNumberMatch = fortuneResult.match(/Số may mắn của bạn:?\s*(\d+)/i);
-    if (luckyNumberMatch && luckyNumberMatch[1]) {
-      luckyNumber = parseInt(luckyNumberMatch[1]);
-      
-      // Lấy nội dung lời chúc mà không có dòng số may mắn
-      const lines = fortuneResult.split('\n');
-      const luckyNumberLineIndex = lines.findIndex(line => line.match(/Số may mắn của bạn/i));
-      
-      if (luckyNumberLineIndex !== -1) {
-        cleanedFortuneResult = lines.slice(0, luckyNumberLineIndex).join('\n').trim();
-      }
+    // Loại bỏ dòng số may mắn (nếu có) từ kết quả của OpenAI
+    const lines = fortuneResult.split('\n');
+    const luckyNumberLineIndex = lines.findIndex(line => line.match(/Số may mắn của bạn|Con số may mắn|Lucky number/i));
+    
+    if (luckyNumberLineIndex !== -1) {
+      cleanedFortuneResult = lines.slice(0, luckyNumberLineIndex).join('\n').trim();
     }
     
     // Lưu lời chúc vào database

@@ -257,6 +257,34 @@ button:hover {
     font-weight: 600;
 }
 
+/* Styling for lucky number */
+.lucky-number {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 25px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ff6b9170, #3498db70);
+    text-align: center;
+    color: #333;
+    border: 2px dashed #ff6b91;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 /* Đồng bộ hoàn toàn style cho highlight */
 .result-message .highlight {
     font-family: 'Montserrat', sans-serif;

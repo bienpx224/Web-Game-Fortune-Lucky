@@ -85,7 +85,6 @@ Yêu cầu bắt buộc:
 - Sử dụng các thuật ngữ công nghệ MỚI NHẤT để tạo sự bất ngờ và hiện đại
 - Xưng hô "đồng nghiệp" nhưng theo phong cách gần gũi, không khuôn mẫu
 - Tối ưu cho hiệu ứng hài hước bất ngờ và để lại ấn tượng khó quên
-- CUỐI LỜI CHÚC, BỔ SUNG THÊM 1 CON SỐ MAY MẮN: SỐ PHẢI NGẪU NHIÊN TỪ 00 TỚI 99 KHÔNG THEO QUY LUẬT NÀO. 
 
 Chỉ trả về đúng nội dung thông điệp, không thêm giới thiệu hay kết thúc.
 `
